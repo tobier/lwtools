@@ -13,13 +13,34 @@ LWTOOLS was born in 2006 when William Astle decided that none of the crossassemb
 
 ## How to use this image
 
-### Compile your program using ``lwasm``
+### Usage
 
-You can use the container to compile your assembler file outside of the container:
+The image plays very well with Visual Studio Code and the [6x09 Assembly](https://marketplace.visualstudio.com/items?itemName=blairleduc.6x09-assembly) extension. Below is an example ``tasks.json`` for assembling a file using the docker image.
 
-``
-$ docker run --rm tobier/lwtools:latest lwasm -o myprogram.asm
-``
+```
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "lwasm",
+            "type": "shell",
+            "windows": {
+              "command": "docker run --rm -v ${PWD}:/usr/src/app -w /usr/src/app tobier/lwtools:latest lwasm --6809 --raw -o ${fileBasenameNoExtension}.bin --list=${fileBasenameNoExtension}.lst ${relativeFile}"
+            },
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            },
+            "problemMatcher": [
+              "$lwasm"
+            ],
+            "presentation": {
+              "reveal": "always"
+            }
+          }
+    ]
+}
+```
 
 ## License
 
